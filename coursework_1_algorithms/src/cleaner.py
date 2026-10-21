@@ -28,7 +28,15 @@ _STOPWORDS_CACHE: dict[str, Set[str]] = {}
 def _get_stopwords(language: str) -> Set[str]:
     """Возвращает кэшированное множество стоп-слов для языка."""
     if language not in _STOPWORDS_CACHE:
-        _STOPWORDS_CACHE[language] = set(stopwords.words(language))
+        # Базовые стоп-слова из NLTK
+        words = set(stopwords.words(language))
+        
+        # Дополняем своими словами (для русского)
+        if language == "russian":
+            custom_ru = {"это", "этот", "эта", "эти", "как", "так", "для", "из", "к", "по", "у", "от", "за", "о"}
+            words.update(custom_ru)
+            
+        _STOPWORDS_CACHE[language] = words
     return _STOPWORDS_CACHE[language]
 
 
